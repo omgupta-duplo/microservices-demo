@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: microservices-demo
+  namespace: microservices-demo
+  labels:
+    app: microservices-demo
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: microservices-demo
+  template:
+    metadata:
+      labels:
+        app: microservices-demo
+    spec:
+      containers:
+        - name: microservices-demo
+          image: REPLACE_ME
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8065
+          envFrom:
+            - configMapRef:
+                name: microservices-demo-config
+            - secretRef:
+                name: microservices-demo-secrets
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8065
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8065
+            initialDelaySeconds: 15
+            periodSeconds: 20

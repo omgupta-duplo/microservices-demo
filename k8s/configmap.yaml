@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: microservices-demo-config
+  namespace: microservices-demo
+  labels:
+    app: microservices-demo
+data:
+  {}
