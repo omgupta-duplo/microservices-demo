@@ -16,11 +16,29 @@ spec:
     metadata:
       labels:
         app: frontend
+      annotations:
+        # Preserved from the repository's own frontend manifests: without this, an Istio
+        # sidecar rewrites the HTTP probes and drops the shop_session-id Cookie headers below.
+        sidecar.istio.io/rewriteAppHTTPProbers: "true"
     spec:
+      # Pod securityContext preserved from kubernetes-manifests/frontend.yaml.
+      securityContext:
+        fsGroup: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 1000
       containers:
         - name: frontend
           image: us-central1-docker.pkg.dev/online-boutique-ci/microservices-demo/frontend:v0.10.7
           imagePullPolicy: IfNotPresent
+          # Container securityContext preserved from kubernetes-manifests/frontend.yaml.
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            privileged: false
+            readOnlyRootFilesystem: true
           ports:
             - name: http
               containerPort: 8080
@@ -36,15 +54,21 @@ spec:
             limits:
               cpu: "200m"
               memory: "128Mi"
+          # Probes preserved from the repository's frontend manifests: /_healthz on 8080,
+          # initialDelaySeconds 10, and the shop_session-id Cookie the frontend expects.
           readinessProbe:
             httpGet:
               path: /_healthz
               port: 8080
-            initialDelaySeconds: 5
-            periodSeconds: 10
+              httpHeaders:
+                - name: Cookie
+                  value: shop_session-id=x-readiness-probe
+            initialDelaySeconds: 10
           livenessProbe:
             httpGet:
               path: /_healthz
               port: 8080
-            initialDelaySeconds: 15
-            periodSeconds: 20
+              httpHeaders:
+                - name: Cookie
+                  value: shop_session-id=x-liveness-probe
+            initialDelaySeconds: 10
