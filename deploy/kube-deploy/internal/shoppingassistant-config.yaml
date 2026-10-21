@@ -1,0 +1,15 @@
+# PLACEHOLDERS - replace before use. Names taken from kustomize/components/shopping-assistant.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: shoppingassistant-config
+  labels:
+    app: shoppingassistantservice
+data:
+  ALLOYDB_CLUSTER_NAME: "REPLACE_ME"
+  ALLOYDB_INSTANCE_NAME: "REPLACE_ME"
+  ALLOYDB_DATABASE_NAME: "REPLACE_ME"
+  ALLOYDB_TABLE_NAME: "REPLACE_ME"
+  ALLOYDB_SECRET_NAME: "REPLACE_ME"   # name of an existing secret reference, not a value
+  PROJECT_ID: "REPLACE_ME"
+  REGION: "REPLACE_ME"
