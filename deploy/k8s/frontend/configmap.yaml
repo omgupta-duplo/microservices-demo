@@ -1,0 +1,22 @@
+# Non-secret configuration only. Never put credentials here; use secret.yaml.
+# Values carried over from kubernetes-manifests/frontend.yaml. The *_ADDR
+# entries assume the backend services run in the same namespace under
+# their default names.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frontend-config
+  labels:
+    app.kubernetes.io/name: frontend
+    app.kubernetes.io/part-of: microservices-demo
+data:
+  PORT: "8080"
+  PRODUCT_CATALOG_SERVICE_ADDR: "productcatalogservice:3550"
+  CURRENCY_SERVICE_ADDR: "currencyservice:7000"
+  CART_SERVICE_ADDR: "cartservice:7070"
+  RECOMMENDATION_SERVICE_ADDR: "recommendationservice:8080"
+  SHIPPING_SERVICE_ADDR: "shippingservice:50051"
+  CHECKOUT_SERVICE_ADDR: "checkoutservice:5050"
+  AD_SERVICE_ADDR: "adservice:9555"
+  SHOPPING_ASSISTANT_SERVICE_ADDR: "shoppingassistantservice:80"
+  ENABLE_PROFILER: "0"
