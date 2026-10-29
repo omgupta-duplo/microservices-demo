@@ -1,0 +1,21 @@
+# Public exposure. No hostname was provided, so this matches any host on "/".
+# ingressClassName is unset, so the cluster's default IngressClass is used.
+# Add spec.ingressClassName, a host, and TLS once the target cluster is known.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: frontend
+  labels:
+    app.kubernetes.io/name: frontend
+    app.kubernetes.io/part-of: microservices-demo
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend
+                port:
+                  name: http
