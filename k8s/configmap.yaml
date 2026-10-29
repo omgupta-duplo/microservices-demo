@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: microservices-demo-config
+  labels:
+    app: microservices-demo
+# No environment variables were supplied on the resource spec.
+# Add key/value pairs here; the Deployment already consumes this
+# ConfigMap via envFrom, so new keys are picked up on the next rollout.
+data: {}
