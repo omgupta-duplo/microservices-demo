@@ -1,0 +1,24 @@
+# Non-secret runtime configuration for frontend.
+# Sources: src/frontend/main.go (mustMapEnv = required, the app panics at startup if unset)
+# and kubernetes-manifests/frontend.yaml (service addresses). Never put secret values here.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frontend-config
+  labels:
+    app.kubernetes.io/name: frontend
+    app.kubernetes.io/part-of: microservices-demo
+data:
+  PORT: "8080"
+  # Required upstream gRPC services (must be deployed separately):
+  PRODUCT_CATALOG_SERVICE_ADDR: "productcatalogservice:3550"
+  CURRENCY_SERVICE_ADDR: "currencyservice:7000"
+  CART_SERVICE_ADDR: "cartservice:7070"
+  RECOMMENDATION_SERVICE_ADDR: "recommendationservice:8080"
+  SHIPPING_SERVICE_ADDR: "shippingservice:50051"
+  CHECKOUT_SERVICE_ADDR: "checkoutservice:5050"
+  AD_SERVICE_ADDR: "adservice:9555"
+  SHOPPING_ASSISTANT_SERVICE_ADDR: "shoppingassistantservice:80"
+  # Optional feature flags (off by default):
+  ENABLE_TRACING: "0"
+  ENABLE_PROFILER: "0"
